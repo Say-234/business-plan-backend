@@ -14,7 +14,7 @@ class TemplateSeeder extends Seeder
     public function run(): void
     {
         $now = Carbon::now();
-        
+
         $templates = [
             [
                 'name' => 'Template 1',

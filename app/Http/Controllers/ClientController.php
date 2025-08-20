@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use FedaPay\FedaPay;
 use App\Models\Document;
 use App\Models\Paiement;
-use FedaPay\Transaction;
-use Cloudinary\Cloudinary;
 use App\Models\Passwordotp;
 use App\Models\Testimonial;
 use App\Models\Notification;
@@ -19,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
+use Cloudinary\Cloudinary;
+use FedaPay\FedaPay;
+use FedaPay\Transaction;
 // use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ClientController extends Controller
@@ -77,6 +77,11 @@ class ClientController extends Controller
         $lastactivity = Document::where('user_id', $user->id)->latest()->get();
         $notificationcount = Notification::where('user_id', $user->id)->where('read', 0)->count();
 
+        // Récupérer les templates disponibles
+        $bplanTemplates = \App\Models\Template::where('type', 'business_plan')->get();
+        $cvTemplates = \App\Models\Template::where('type', 'cv')->get();
+        $lmTemplates = \App\Models\Template::where('type', 'lettre_motivation')->get();
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -85,7 +90,10 @@ class ClientController extends Controller
                 'cvs' => $cvs,
                 'lms' => $lms,
                 'lastactivity' => $lastactivity,
-                'notificationcount' => $notificationcount
+                'notificationcount' => $notificationcount,
+                'bplan_templates' => $bplanTemplates,
+                'cv_templates' => $cvTemplates,
+                'lm_templates' => $lmTemplates,
             ]
         ]);
     }
@@ -130,11 +138,11 @@ class ClientController extends Controller
                 'message' => 'Utilisateur non authentifié'
             ], 401);
         }
-        
+
         $bplans = Document::where('user_id', Auth::user()->id)->where('type', 'business_plan')->with('templateCustoms.template')->get();
         $lastactivity = Document::where('user_id', Auth::user()->id)->where('type', 'business_plan')->latest()->get();
         $notificationcount = Notification::where('user_id', Auth::user()->id)->where('read', 0)->count();
-        
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -157,10 +165,10 @@ class ClientController extends Controller
                 'message' => 'Utilisateur non authentifié'
             ], 401);
         }
-        
+
         $lastactivity = Document::where('user_id', Auth::user()->id)->where('type', 'cv')->latest()->get();
         $notificationcount = Notification::where('user_id', Auth::user()->id)->where('read', 0)->count();
-        
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -182,10 +190,10 @@ class ClientController extends Controller
                 'message' => 'Utilisateur non authentifié'
             ], 401);
         }
-        
+
         $lastactivity = Document::where('user_id', Auth::user()->id)->where('type', 'lettre_motivation')->latest()->get();
         $notificationcount = Notification::where('user_id', Auth::user()->id)->where('read', 0)->count();
-        
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -207,10 +215,10 @@ class ClientController extends Controller
                 'message' => 'Utilisateur non authentifié'
             ], 401);
         }
-        
+
         $user = Auth::user();
         $notificationcount = Notification::where('user_id', $user->id)->where('read', 0)->count();
-        
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -232,13 +240,13 @@ class ClientController extends Controller
                 'message' => 'Utilisateur non authentifié'
             ], 401);
         }
-        
+
         $user_id = Auth::user()->id;
         $notification = Notification::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
         $read = Notification::where('user_id', $user_id)->where('read', 1)->get();
         $unread = Notification::where('user_id', $user_id)->where('read', 0)->get();
         $notificationcount = Notification::where('user_id', Auth::user()->id)->where('read', 0)->count();
-        
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -265,7 +273,7 @@ class ClientController extends Controller
                 'message' => 'Utilisateur non authentifié'
             ], 401);
         }
-        
+
         $notification_id = $request->notification_id;
         $notification = Notification::find($notification_id);
 
@@ -515,7 +523,7 @@ class ClientController extends Controller
 
         try {
             User::where('id', $user->id)->update($dataToUpdate);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Profil mis à jour avec succès',

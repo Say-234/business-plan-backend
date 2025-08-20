@@ -32,3 +32,11 @@ return [
     'supports_credentials' => true,
 
 ];
+
+return [
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'allowed_methods' => ['*'],
+    'allowed_origins' => ['*'],
+    'allowed_headers' => ['*'],
+    'supports_credentials' => true,
+];

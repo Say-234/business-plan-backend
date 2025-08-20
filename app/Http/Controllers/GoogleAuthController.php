@@ -34,4 +34,47 @@ class GoogleAuthController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
+
+    public function signInWithGoogle(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string',
+        ]);
+
+        try {
+            $google_user = Socialite::driver('google')->userFromToken($request->token);
+
+            $user = User::where('google_id', $google_user->getId())->first();
+
+            if (!$user) {
+                $user = User::where('email', $google_user->getEmail())->first();
+                if ($user) {
+                    $user->google_id = $google_user->getId();
+                    $user->save();
+                } else {
+                    $user = User::create([
+                        'name' => $google_user->getName(),
+                        'email' => $google_user->getEmail(),
+                        'google_id' => $google_user->getId(),
+                        'email_verified_at' => now(),
+                    ]);
+                }
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'status' => 'success',
+                'user' => $user,
+                'token' => $token,
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Authentication failed',
+                'error' => $th->getMessage(),
+            ], 401);
+        }
+    }
 }

@@ -71,40 +71,73 @@ class EvaluationController extends Controller
         }
         
         try {
-            // Récupérer toutes les données du formulaire
-            $formData = $request->all();
+            $validatedData = $request->validate([
+                'age' => 'required|string',
+                'situationPro' => 'required|string',
+                'activiteCorrespond' => 'required|string',
+                'experiencePro' => 'required|numeric',
+                'soutienEntourage' => 'required|string',
+                'departement' => 'required|string',
+                'critereChoix' => 'required|string',
+                'mobilite' => 'required|string',
+                'projetDescription' => 'required|string',
+                'projetRaison' => 'required|string',
+                'projetEquipe' => 'required|string',
+                'projetEcheance' => 'required|string',
+                'emploisDemarrage' => 'required|numeric',
+                'emploisTroisAns' => 'required|numeric',
+                'montantInvestissements' => 'required|numeric',
+                'apportPersonnelPourcentage' => 'required|numeric',
+                'projetFinancement' => 'required|string',
+                'produitSecteurActivite' => 'required|string',
+                'produitStadeDeveloppement' => 'required|string',
+                'produitConditionCommercialisation' => 'required|string',
+                'produitSaisonnalite' => 'required|string',
+                'produitModeleEconomique' => 'required|string',
+                'produitStrategieDemarrage' => 'required|string',
+                'marcheQualification' => 'required|string',
+                'marcheDimensionGeographique' => 'required|string',
+                'marcheFutursClientsIdentification' => 'required|string',
+                'marcheFutursClientsConnaissance' => 'required|string',
+                'marcheConcurrentsIdentification' => 'required|string',
+                'marcheFournisseursIdentification' => 'required|string',
+                'marcheFournisseursCaracteristiques' => 'required|string',
+                'document_id' => 'nullable|integer',
+            ]);
+
+            $formData = $validatedData;
             
             // Extraire les données pour l'IA
-            $age = $request->input('age');
-            $situation = $request->input('situation');
-            $diplome = $request->input('diplome');
-            $experience = $request->input('experience');
-            $soutien = $request->input('soutien');
-            $department = $request->input('department');
-            $motivation = $request->input('motivation');
-            $change_region = $request->input('change_region');
-            $project = $request->input('project');
-            $reason = $request->input('reason');
-            $alone_team = $request->input('alone_team');
-            $echeance = $request->input('echeance');
-            $employe = $request->input('employe');
-            $employe_three = $request->input('employe_three');
-            $investment_amount = $request->input('investment_amount');
-            $investment_share = $request->input('investment_share');
-            $finance = $request->input('finance');
-            $activity = $request->input('activity');
-            $development_stage = $request->input('development_stage');
-            $marketing_condition = $request->input('marketing_condition');
-            $season = $request->input('season');
-            $eco_modal = $request->input('eco_modal');
-            $start_strategy = $request->input('start_strategy');
-            $market_qualification = $request->input('market_qualification');
-            $market_geography = $request->input('market_geography');
-            $clients_identified = $request->input('clients_identified');
-            $client_knowledge = $request->input('client_knowledge');
-            $competitors_identified = $request->input('competitors_identified');
-            $suppliers_identified = $request->input('suppliers_identified');
-            $supplier_characteristics = $request->input('supplier_characteristics');
+            $age = $validatedData['age'];
+            $situation = $validatedData['situationPro'];
+            $diplome = $validatedData['activiteCorrespond'];
+            $experience = $validatedData['experiencePro'];
+            $soutien = $validatedData['soutienEntourage'];
+            $department = $validatedData['departement'];
+            $motivation = $validatedData['critereChoix'];
+            $change_region = $validatedData['mobilite'];
+            $project = $validatedData['projetDescription'];
+            $reason = $validatedData['projetRaison'];
+            $alone_team = $validatedData['projetEquipe'];
+            $echeance = $validatedData['projetEcheance'];
+            $employe = $validatedData['emploisDemarrage'];
+            $employe_three = $validatedData['emploisTroisAns'];
+            $investment_amount = $validatedData['montantInvestissements'];
+            $investment_share = $validatedData['apportPersonnelPourcentage'];
+            $finance = $validatedData['projetFinancement'];
+            $activity = $validatedData['produitSecteurActivite'];
+            $development_stage = $validatedData['produitStadeDeveloppement'];
+            $marketing_condition = $validatedData['produitConditionCommercialisation'];
+            $season = $validatedData['produitSaisonnalite'];
+            $eco_modal = $validatedData['produitModeleEconomique'];
+            $start_strategy = $validatedData['produitStrategieDemarrage'];
+            $market_qualification = $validatedData['marcheQualification'];
+            $market_geography = $validatedData['marcheDimensionGeographique'];
+            $clients_identified = $validatedData['marcheFutursClientsIdentification'];
+            $client_knowledge = $validatedData['marcheFutursClientsConnaissance'];
+            $competitors_identified = $validatedData['marcheConcurrentsIdentification'];
+            $suppliers_identified = $validatedData['marcheFournisseursIdentification'];
+            $supplier_characteristics = $validatedData['marcheFournisseursCaracteristiques'];
             
             $documentId = null;
             // Sauvegarder ou mettre à jour l'évaluation dans la base de données

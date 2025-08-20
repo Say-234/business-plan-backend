@@ -17,11 +17,15 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\AuthController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Auth routes for mobile
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('api.register');
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('api.login');
 // Public routes
 Route::post('/send-notif', [PushNotificationController::class, 'sendPushNotification']);
 Route::post('/testimonial', [ClientController::class, 'testimonial'])->name('api.testimonial.store');
@@ -30,6 +34,11 @@ Route::post('/sendotp', [ClientController::class, 'sendotp'])->name('api.passwor
 Route::post('/verifyotp', [ClientController::class, 'checkotp'])->name('api.password.verify.otp');
 Route::post('/resetpassword', [ClientController::class, 'resetpassword'])->name('api.password.reset.otp');
 Route::post('/fcm-token', [PushNotificationController::class, 'getToken'])->name('api.fcm-token');
+
+// Routes d'authentification
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/user', [AuthController::class, 'user']);
 
 // Client routes
 Route::prefix('client')->name('api.client.')->middleware('auth:sanctum')->group(function () {
@@ -43,6 +52,7 @@ Route::prefix('client')->name('api.client.')->middleware('auth:sanctum')->group(
     Route::post('/save-template-settings', [BusinessPlanController::class, 'saveTemplateSettings'])->name('save.template.settings');
     Route::delete('/business-plan/{id}', [BusinessPlanController::class, 'destroy'])->name('destroypblan');
     Route::post('/business-plan/preview', [BusinessPlanController::class, 'preview'])->name('previewpblan');
+    Route::get('/business-plan/download/{id}', [BusinessPlanController::class, 'downloadBusinessPlan'])->name('downloadBusinessPlan');
     Route::get('/curriculum-vitae', [ClientController::class, 'cvitae'])->name('cvitae');
     Route::get('/lettre-motivation', [ClientController::class, 'lmotivation'])->name('lmotivation');
     Route::get('/profile', [ClientController::class, 'profile'])->name('profile');
@@ -75,6 +85,13 @@ Route::prefix('client')->name('api.client.')->middleware('auth:sanctum')->group(
     Route::get('/project', [ProjectController::class, 'index'])->name('project');
 });
 
+// Routes protégées
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/client', [ClientController::class, 'index']);
+    Route::get('/client/dashboard', [ClientController::class, 'clientdashboard']);
+    Route::get('/client/newdashboard', [ClientController::class, 'newdashboard']);
+});
+
 // Profile routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('api.profile.edit');
@@ -85,3 +102,4 @@ Route::middleware('auth:sanctum')->group(function () {
 // Google Auth routes
 Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('api.auth.google');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callbackGoogle'])->name('api.auth.google.callback');
+Route::post('/auth/google/signin', [GoogleAuthController::class, 'signInWithGoogle'])->name('api.auth.google.signin');

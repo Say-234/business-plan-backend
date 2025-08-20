@@ -7,9 +7,12 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegisterMailable;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
@@ -19,7 +22,7 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): Response
+    public function store(Request $request): Response|JsonResponse
     {
         $request->validate([
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
@@ -41,6 +44,14 @@ class RegisteredUserController extends Controller
 
             Mail::to($request->email)->send(new RegisterMailable($request->email, $password));
             event(new Registered($user));
+
+            if ($request->wantsJson()) {
+                $token = $user->createToken('mobile-token')->plainTextToken;
+                return response()->json([
+                    'user' => $user,
+                    'token' => $token,
+                ]);
+            }
 
             Auth::login($user);
 

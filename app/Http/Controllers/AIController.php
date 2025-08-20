@@ -134,80 +134,26 @@ EOT;
      */
     private function parseResponseSections($rawResponse)
     {
-        // Initialiser les sections avec des valeurs par défaut
-        // $sections = [
-        //     'positifs' => 'Aucun point positif identifié.',
-        //     'negatifs' => 'Aucun point négatif identifié.',
-        //     'ameliorations' => 'Aucune recommandation identifiée.'
-        // ];
-
-        // // Rechercher les sections dans la réponse
-        // preg_match('/Point Positifs\s*:\s*(?P<positifs>.*?)(?=Point Négatif\s*:|Point A Améliorer\s*:|$)/si', $rawResponse, $matches);
-        // $sections['positifs'] = trim($matches['positifs'] ?? '');
-
-        // preg_match('/Point Négatif\s*:\s*(?P<negatifs>.*?)(?=Point A Améliorer\s*:|Point Positifs\s*:|$)/si', $rawResponse, $matches);
-        // $sections['negatifs'] = trim($matches['negatifs'] ?? '');
-
-        // preg_match('/Point A Améliorer\s*:\s*(?P<ameliorations>.*?)(?=Point Positifs\s*:|Point Négatif\s*:|$)/si', $rawResponse, $matches);
-        // $sections['ameliorations'] = trim($matches['ameliorations'] ?? '');
-
-        // Normaliser la réponse pour faciliter l'analyse
-        $normalizedResponse = strtolower(trim($rawResponse));
-
-        // Définir les marqueurs possibles pour chaque section
-        $positiveMarkers = ['points positifs', '✅', 'positifs', 'atouts', 'forces'];
-        $negativeMarkers = ['points négatifs', '❌', 'négatifs', 'risques', 'faiblesses'];
-        $improvementMarkers = ['points à améliorer', '🔧', 'recommandations', 'améliorations', 'suggestions'];
-
-        // Initialiser les sections
         $sections = [
             'positifs' => 'Aucun point positif identifié.',
             'negatifs' => 'Aucun point négatif identifié.',
             'ameliorations' => 'Aucune recommandation identifiée.'
         ];
 
-        // Trouver les positions de chaque marqueur
-        $positions = [];
-        foreach ([$positiveMarkers, $negativeMarkers, $improvementMarkers] as $index => $markers) {
-            foreach ($markers as $marker) {
-                $pos = strpos($normalizedResponse, strtolower($marker));
-                if ($pos !== false) {
-                    $positions[$index] = $pos;
-                    break;
+        // Define patterns for each section
+        $patterns = [
+            'positifs' => '/✅ Points positifs\n(.*?)(?:\n❌ Points négatifs \/ risques|\n🔧 Recommandations concrètes|$)/s',
+            'negatifs' => '/❌ Points négatifs \/ risques\n(.*?)(?:\n🔧 Recommandations concrètes|$)/s',
+            'ameliorations' => '/🔧 Recommandations concrètes\n(.*?)$/s',
+        ];
+
+        foreach ($patterns as $key => $pattern) {
+            if (preg_match($pattern, $rawResponse, $matches)) {
+                $content = trim($matches[1]);
+                if (!empty($content)) {
+                    $sections[$key] = $content;
                 }
             }
-        }
-
-        // Trier les sections par ordre d'apparition
-        asort($positions);
-        $orderedSections = array_keys($positions);
-
-        // Extraire le contenu de chaque section
-        foreach ($orderedSections as $i => $sectionIndex) {
-            $startPos = $positions[$sectionIndex];
-            $nextPos = $i < count($orderedSections) - 1 ? $positions[$orderedSections[$i + 1]] : strlen($normalizedResponse);
-
-            $content = substr($rawResponse, $startPos, $nextPos - $startPos);
-            $content = preg_replace('/^(.*?)([:]|-\n)/', '', $content); // Correction du motif regex
-            $content = trim($content);
-
-            switch ($sectionIndex) {
-                case 0:
-                    $sections['positifs'] = $content ?: $sections['positifs'];
-                    break;
-                case 1:
-                    $sections['negatifs'] = $content ?: $sections['negatifs'];
-                    break;
-                case 2:
-                    $sections['ameliorations'] = $content ?: $sections['ameliorations'];
-                    break;
-            }
-        }
-
-        // Nettoyer les résultats
-        foreach ($sections as &$section) {
-            $section = preg_replace('/\s+/', ' ', trim($section));
-            $section = ucfirst($section);
         }
 
         return $sections;

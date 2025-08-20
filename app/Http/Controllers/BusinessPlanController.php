@@ -349,4 +349,58 @@ class BusinessPlanController extends Controller
             ], 500);
         }
     }
+
+    public function downloadBusinessPlan($id)
+    {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Utilisateur non authentifié'
+            ], 401);
+        }
+
+        try {
+            $document = Document::where('user_id', Auth::id())
+                ->where('type', 'business_plan')
+                ->findOrFail($id);
+
+            $templateCustom = TemplateCustom::where('document_id', $document->id)->first();
+            $template = Template::where('id', $templateCustom->template_id)->first();
+            $style = $templateCustom->style;
+
+            // Render the HTML view
+            $html = view($template->path, [
+                'content' => $document->content,
+                'style' => $style,
+                'preview' => false // Not a preview, so generate full PDF
+            ])->render();
+
+            // Generate PDF
+            $pdf = SnappyPdf::loadHtml($html);
+
+            // Define a filename for the PDF
+            $filename = 'business_plan_' . $document->id . '.pdf';
+            $path = storage_path('app/public/business_plans/' . $filename);
+
+            // Ensure the directory exists
+            if (!file_exists(storage_path('app/public/business_plans'))) {
+                mkdir(storage_path('app/public/business_plans'), 0777, true);
+            }
+
+            // Save the PDF to storage
+            $pdf->save($path);
+
+            // Return the URL to the PDF
+            return response()->json([
+                'success' => true,
+                'pdf_url' => asset('storage/business_plans/' . $filename)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la génération ou du téléchargement du Business Plan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
