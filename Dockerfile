@@ -34,7 +34,7 @@ COPY . .
 # Activer mod_rewrite
 RUN a2enmod rewrite
 # Remplacer la configuration Apache par défaut pour pointer vers le dossier public de Laravel
-COPY ./.docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY .docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Donner les bonnes permissions aux dossiers de Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
