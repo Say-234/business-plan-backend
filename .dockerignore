@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+.dockerignore
+.docker
+
+# IDE
+.idea
+.vscode
+
+# Laravel specific
+/vendor
+/node_modules
+npm-debug.log
+yarn-error.log
+.env
+.env.backup
+.env.example
+/public/hot
+/public/storage
+/storage/*.key
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*.log
+Homestead.json
+Homestead.yaml
