@@ -6,7 +6,6 @@
 # Docker
 Dockerfile
 .dockerignore
-.docker
 
 # IDE
 .idea
