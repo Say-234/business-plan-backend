@@ -1,0 +1,597 @@
+name: 'Business Plan'
+description: |-
+  Cette route retourne tous les business plans de l'utilisateur connecté
+  avec leurs templates personnalisés et les activités récentes.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/client/business-plan
+    metadata:
+      groupName: 'Business Plan'
+      groupDescription: |-
+        Cette route retourne tous les business plans de l'utilisateur connecté
+        avec leurs templates personnalisés et les activités récentes.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Afficher la page des business plans.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "bplans": [
+                {
+                  "id": 1,
+                  "type": "business_plan",
+                  "status": "completed",
+                  "templateCustoms": {
+                    "template": {
+                      "id": 1,
+                      "name": "Template Moderne"
+                    }
+                  }
+                }
+              ],
+              "lastactivity": [],
+              "notificationcount": 2
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Utilisateur non authentifié"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/business-plan/create
+    metadata:
+      groupName: 'Business Plan'
+      groupDescription: |-
+        Cette route permet de créer un nouveau business plan ou de récupérer un brouillon existant.
+        Si un brouillon existe déjà, il est retourné. Sinon, un nouveau document est créé.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Créer ou récupérer un brouillon de business plan.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Brouillon existant",
+            "data": {
+              "draft_id": 1
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Nouveau business plan créé",
+            "data": {
+              "business": {
+                "id": 1,
+                "type": "business_plan",
+                "status": "draft"
+              },
+              "templates": [],
+              "templatecustom": {}
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Utilisateur non authentifié"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/client/business-plan/{id}/edit'
+    metadata:
+      groupName: 'Business Plan'
+      groupDescription: |-
+        Cette route permet de récupérer un business plan existant pour l'édition.
+        Elle initialise toutes les sections nécessaires si elles n'existent pas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Éditer un business plan existant.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "requis L'ID du business plan à éditer. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Business plan récupéré avec succès",
+            "data": {
+              "business": {
+                "id": 1,
+                "content": {
+                  "information_genrale": {
+                    "nom_projet": "Mon Projet"
+                  }
+                }
+              },
+              "templates": [],
+              "templatecustom": {}
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Utilisateur non authentifié"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Business plan non trouvé"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/business-plan
+    metadata:
+      groupName: 'Business Plan'
+      groupDescription: |-
+        Cette route permet de sauvegarder le contenu d'un business plan.
+        Le statut peut être 'draft' ou 'completed' selon la complétude du contenu.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Sauvegarder un business plan.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      content:
+        name: content
+        description: 'requis Le contenu du business plan au format JSON.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      content: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Business plan sauvegardé avec succès",
+            "data": {
+              "id": 1,
+              "status": "completed",
+              "content": {}
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Utilisateur non authentifié"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Aucun business plan en cours trouvé"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/client/business-plan/{id}'
+    metadata:
+      groupName: 'Business Plan'
+      groupDescription: "Cette route permet de mettre à jour le contenu d'un business plan existant."
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Mettre à jour un business plan.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "requis L'ID du business plan à mettre à jour. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      content:
+        name: content
+        description: 'requis Le contenu mis à jour au format JSON.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      content: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Business plan mis à jour",
+            "data": {
+              "id": 1,
+              "content": {}
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Business plan non trouvé"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/save-template-settings
+    metadata:
+      groupName: 'Business Plan'
+      groupDescription: |-
+        Cette route permet de sauvegarder les paramètres de style ou de changer le template
+        utilisé pour un business plan.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Sauvegarder les paramètres du template.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      template_id:
+        name: template_id
+        description: "L'ID du nouveau template à utiliser. Exemple: 2"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      style_key:
+        name: style_key
+        description: 'La clé du style à modifier. Exemple: color'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      style_value:
+        name: style_value
+        description: 'La valeur du style. Exemple: #FF0000'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      template_id: 17
+      style_key: consequatur
+      style_value: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Paramètres du template sauvegardés",
+            "data": {
+              "template_id": 2,
+              "style": {
+                "color": "#FF0000"
+              }
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Template personnalisé non trouvé"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/client/business-plan/{id}'
+    metadata:
+      groupName: 'Business Plan'
+      groupDescription: 'Cette route permet de supprimer définitivement un business plan.'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Supprimer un business plan.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "requis L'ID du business plan à supprimer. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Business plan supprimé avec succès",
+            "data": null
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Business plan non trouvé"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Une erreur est survenue lors de la suppression du business plan",
+            "error": "Message d'erreur détaillé"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/business-plan/preview
+    metadata:
+      groupName: 'Business Plan'
+      groupDescription: 'Cette route permet de générer un aperçu du business plan avec le template sélectionné.'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Prévisualiser un business plan.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      content:
+        name: content
+        description: 'requis Le contenu du business plan au format JSON.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      content: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: '"Vue HTML du business plan avec le template appliqué"'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

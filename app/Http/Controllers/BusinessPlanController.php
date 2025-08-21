@@ -14,6 +14,39 @@ use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class BusinessPlanController extends Controller
 {
+    /**
+     * Créer ou récupérer un brouillon de business plan.
+     *
+     * @group Business Plan
+     *
+     * Cette route permet de créer un nouveau business plan ou de récupérer un brouillon existant.
+     * Si un brouillon existe déjà, il est retourné. Sinon, un nouveau document est créé.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Brouillon existant",
+     *   "data": {
+     *     "draft_id": 1
+     *   }
+     * }
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Nouveau business plan créé",
+     *   "data": {
+     *     "business": {
+     *       "id": 1,
+     *       "type": "business_plan",
+     *       "status": "draft"
+     *     },
+     *     "templates": [],
+     *     "templatecustom": {}
+     *   }
+     * }
+     * @response 401 {
+     *   "success": false,
+     *   "message": "Utilisateur non authentifié"
+     * }
+     */
     public function addpblan()
     {
         if (!Auth::check()) {
@@ -67,6 +100,41 @@ class BusinessPlanController extends Controller
         ]);
     }
 
+    /**
+     * Éditer un business plan existant.
+     *
+     * @group Business Plan
+     *
+     * Cette route permet de récupérer un business plan existant pour l'édition.
+     * Elle initialise toutes les sections nécessaires si elles n'existent pas.
+     *
+     * @urlParam id integer requis L'ID du business plan à éditer. Exemple: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Business plan récupéré avec succès",
+     *   "data": {
+     *     "business": {
+     *       "id": 1,
+     *       "content": {
+     *         "information_genrale": {
+     *           "nom_projet": "Mon Projet"
+     *         }
+     *       }
+     *     },
+     *     "templates": [],
+     *     "templatecustom": {}
+     *   }
+     * }
+     * @response 401 {
+     *   "success": false,
+     *   "message": "Utilisateur non authentifié"
+     * }
+     * @response 404 {
+     *   "success": false,
+     *   "message": "Business plan non trouvé"
+     * }
+     */
     public function editpblan($id)
     {
         if (!Auth::check()) {
@@ -152,6 +220,34 @@ class BusinessPlanController extends Controller
         }
     }
 
+    /**
+     * Sauvegarder un business plan.
+     *
+     * @group Business Plan
+     *
+     * Cette route permet de sauvegarder le contenu d'un business plan.
+     * Le statut peut être 'draft' ou 'completed' selon la complétude du contenu.
+     *
+     * @bodyParam content string requis Le contenu du business plan au format JSON.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Business plan sauvegardé avec succès",
+     *   "data": {
+     *     "id": 1,
+     *     "status": "completed",
+     *     "content": {}
+     *   }
+     * }
+     * @response 401 {
+     *   "success": false,
+     *   "message": "Utilisateur non authentifié"
+     * }
+     * @response 404 {
+     *   "success": false,
+     *   "message": "Aucun business plan en cours trouvé"
+     * }
+     */
     public function store(Request $request)
     {
         $content = json_decode($request->content, true);
@@ -203,7 +299,31 @@ class BusinessPlanController extends Controller
     }
 
     /**
-     * Sauvegarde les paramètres du template (style ou template_id)
+     * Sauvegarder les paramètres du template.
+     *
+     * @group Business Plan
+     *
+     * Cette route permet de sauvegarder les paramètres de style ou de changer le template
+     * utilisé pour un business plan.
+     *
+     * @bodyParam template_id integer L'ID du nouveau template à utiliser. Exemple: 2
+     * @bodyParam style_key string La clé du style à modifier. Exemple: color
+     * @bodyParam style_value string La valeur du style. Exemple: #FF0000
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Paramètres du template sauvegardés",
+     *   "data": {
+     *     "template_id": 2,
+     *     "style": {
+     *       "color": "#FF0000"
+     *     }
+     *   }
+     * }
+     * @response 404 {
+     *   "success": false,
+     *   "message": "Template personnalisé non trouvé"
+     * }
      */
     public function saveTemplateSettings(Request $request)
     {
@@ -282,6 +402,29 @@ class BusinessPlanController extends Controller
         return true;
     }
 
+    /**
+     * Mettre à jour un business plan.
+     *
+     * @group Business Plan
+     *
+     * Cette route permet de mettre à jour le contenu d'un business plan existant.
+     *
+     * @urlParam id integer requis L'ID du business plan à mettre à jour. Exemple: 1
+     * @bodyParam content string requis Le contenu mis à jour au format JSON.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Business plan mis à jour",
+     *   "data": {
+     *     "id": 1,
+     *     "content": {}
+     *   }
+     * }
+     * @response 404 {
+     *   "success": false,
+     *   "message": "Business plan non trouvé"
+     * }
+     */
     public function update(Request $request, $id)
     {
         $document = Document::where('user_id', Auth::id())
@@ -308,6 +451,17 @@ class BusinessPlanController extends Controller
         ]);
     }
 
+    /**
+     * Prévisualiser un business plan.
+     *
+     * @group Business Plan
+     *
+     * Cette route permet de générer un aperçu du business plan avec le template sélectionné.
+     *
+     * @bodyParam content string requis Le contenu du business plan au format JSON.
+     *
+     * @response 200 "Vue HTML du business plan avec le template appliqué"
+     */
     public function preview(Request $request)
     {
         $content = json_decode($request->content, true);
@@ -323,6 +477,30 @@ class BusinessPlanController extends Controller
         ]);
     }
 
+    /**
+     * Supprimer un business plan.
+     *
+     * @group Business Plan
+     *
+     * Cette route permet de supprimer définitivement un business plan.
+     *
+     * @urlParam id integer requis L'ID du business plan à supprimer. Exemple: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "message": "Business plan supprimé avec succès",
+     *   "data": null
+     * }
+     * @response 404 {
+     *   "success": false,
+     *   "message": "Business plan non trouvé"
+     * }
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Une erreur est survenue lors de la suppression du business plan",
+     *   "error": "Message d'erreur détaillé"
+     * }
+     */
     public function destroy($id)
     {
         try {

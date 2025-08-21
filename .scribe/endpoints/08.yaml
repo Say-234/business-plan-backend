@@ -1,0 +1,648 @@
+name: Évaluation
+description: |-
+  Cette route retourne tous les documents de l'utilisateur connecté
+  ainsi que le nombre de notifications non lues.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/client/evaluation
+    metadata:
+      groupName: Évaluation
+      groupDescription: |-
+        Cette route retourne tous les documents de l'utilisateur connecté
+        ainsi que le nombre de notifications non lues.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Lister les documents de l'utilisateur."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "notificationcount": 3,
+              "documents": [
+                {
+                  "id": 1,
+                  "title": "Mon Business Plan",
+                  "content": "Contenu du document...",
+                  "created_at": "2024-01-01T10:00:00Z"
+                }
+              ]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error retrieving documents: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/ia/evaluate
+    metadata:
+      groupName: Évaluation
+      groupDescription: |-
+        Cette route génère une évaluation détaillée d'un projet entrepreneurial
+        en utilisant l'intelligence artificielle. Elle analyse tous les aspects
+        du projet et fournit des recommandations.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Générer une évaluation IA d'un projet."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      document_id:
+        name: document_id
+        description: "optionnel L'ID du document à évaluer. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      age:
+        name: age
+        description: "requis L'âge du porteur de projet. Exemple: 30"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      situation:
+        name: situation
+        description: 'requis La situation actuelle. Exemple: Employé'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      diplome:
+        name: diplome
+        description: 'requis Le niveau de diplôme. Exemple: Master'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      experience:
+        name: experience
+        description: "requis L'expérience professionnelle. Exemple: 5 ans"
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      soutien:
+        name: soutien
+        description: 'requis Le soutien disponible. Exemple: Famille'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      department:
+        name: department
+        description: 'requis Le département. Exemple: Paris'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      motivation:
+        name: motivation
+        description: 'requis La motivation. Exemple: Indépendance'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      change_region:
+        name: change_region
+        description: 'requis Volonté de changer de région. Exemple: Non'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      project:
+        name: project
+        description: 'requis Description du projet. Exemple: E-commerce'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      reason:
+        name: reason
+        description: 'requis Raison du choix. Exemple: Marché porteur'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      alone_team:
+        name: alone_team
+        description: 'requis Seul ou en équipe. Exemple: Seul'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      echeance:
+        name: echeance
+        description: 'requis Échéance de lancement. Exemple: 6 mois'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      employe:
+        name: employe
+        description: "requis Nombre d'employés prévus. Exemple: 2"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      employe_three:
+        name: employe_three
+        description: "requis Nombre d'employés à 3 ans. Exemple: 5"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      investment_amount:
+        name: investment_amount
+        description: "requis Montant d'investissement. Exemple: 50000"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      investment_share:
+        name: investment_share
+        description: "requis Part d'investissement personnel. Exemple: 20000"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      finance:
+        name: finance
+        description: 'requis Mode de financement. Exemple: Prêt bancaire'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      activity:
+        name: activity
+        description: "requis Secteur d'activité. Exemple: Commerce"
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      development_stage:
+        name: development_stage
+        description: 'requis Stade de développement. Exemple: Idée'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      marketing_condition:
+        name: marketing_condition
+        description: 'requis Conditions de commercialisation. Exemple: En ligne'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      season:
+        name: season
+        description: 'requis Saisonnalité. Exemple: Non'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      eco_modal:
+        name: eco_modal
+        description: 'requis Modèle économique. Exemple: Vente directe'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      start_strategy:
+        name: start_strategy
+        description: 'requis Stratégie de lancement. Exemple: Marketing digital'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      market_qualification:
+        name: market_qualification
+        description: 'requis Qualification du marché. Exemple: Porteur'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      market_geography:
+        name: market_geography
+        description: 'requis Géographie du marché. Exemple: National'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      clients_identified:
+        name: clients_identified
+        description: 'requis Clients identifiés. Exemple: Oui'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      client_knowledge:
+        name: client_knowledge
+        description: 'requis Connaissance client. Exemple: Bonne'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      competitors_identified:
+        name: competitors_identified
+        description: 'requis Concurrents identifiés. Exemple: Oui'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      suppliers_identified:
+        name: suppliers_identified
+        description: 'requis Fournisseurs identifiés. Exemple: Oui'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      supplier_characteristics:
+        name: supplier_characteristics
+        description: 'requis Caractéristiques fournisseurs. Exemple: Fiables'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      document_id: 17
+      age: 17
+      situation: consequatur
+      diplome: consequatur
+      experience: consequatur
+      soutien: consequatur
+      department: consequatur
+      motivation: consequatur
+      change_region: consequatur
+      project: consequatur
+      reason: consequatur
+      alone_team: consequatur
+      echeance: consequatur
+      employe: 17
+      employe_three: 17
+      investment_amount: 17
+      investment_share: 17
+      finance: consequatur
+      activity: consequatur
+      development_stage: consequatur
+      marketing_condition: consequatur
+      season: consequatur
+      eco_modal: consequatur
+      start_strategy: consequatur
+      market_qualification: consequatur
+      market_geography: consequatur
+      clients_identified: consequatur
+      client_knowledge: consequatur
+      competitors_identified: consequatur
+      suppliers_identified: consequatur
+      supplier_characteristics: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "document_id": 1,
+              "ai_response": {
+                "positifs": "Points positifs identifiés par l'IA...",
+                "negatifs": "Points négatifs à améliorer...",
+                "ameliorations": "Suggestions d'amélioration détaillées..."
+              }
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error generating response: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/client/ia/response/{id}'
+    metadata:
+      groupName: Évaluation
+      groupDescription: |-
+        Cette route retourne l'évaluation IA d'un document avec le contenu
+        formaté en HTML via CommonMark pour l'affichage.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Afficher la page de réponse d'évaluation."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "requis L'ID du document. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "response": {
+                "positifs": "<p>Points positifs formatés en HTML...</p>",
+                "negatifs": "<p>Points négatifs formatés en HTML...</p>",
+                "ameliorations": "<p>Améliorations formatées en HTML...</p>"
+              },
+              "notificationcount": 3
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Evaluation not found"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error retrieving response: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/client/evaluation/document/{id}'
+    metadata:
+      groupName: Évaluation
+      groupDescription: "Cette route retourne l'évaluation associée à un document spécifique."
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Récupérer l'évaluation d'un document."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "requis L'ID du document. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "id": 1,
+              "document_id": 1,
+              "ai_response": {
+                "positifs": "Points positifs du projet...",
+                "negatifs": "Points négatifs à améliorer...",
+                "ameliorations": "Suggestions d'amélioration..."
+              },
+              "created_at": "2024-01-01T10:00:00Z"
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Aucune évaluation trouvée pour ce document"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

@@ -15,7 +15,27 @@ use Illuminate\Validation\ValidationException;
 class NewPasswordController extends Controller
 {
     /**
-     * Handle an incoming new password request.
+     * Réinitialiser le mot de passe.
+     *
+     * @group Authentification
+     *
+     * Cette route permet de réinitialiser le mot de passe d'un utilisateur
+     * à l'aide du token reçu par email.
+     *
+     * @bodyParam token string requis Le token de réinitialisation reçu par email. Exemple: abc123token
+     * @bodyParam email string requis L'adresse email de l'utilisateur. Exemple: user@example.com
+     * @bodyParam password string requis Le nouveau mot de passe. Exemple: nouveaumotdepasse123
+     * @bodyParam password_confirmation string requis Confirmation du nouveau mot de passe. Exemple: nouveaumotdepasse123
+     *
+     * @response 200 {
+     *   "status": "Votre mot de passe a été réinitialisé !"
+     * }
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "email": ["Ce token de réinitialisation de mot de passe est invalide"]
+     *   }
+     * }
      *
      * @throws \Illuminate\Validation\ValidationException
      */

@@ -45,7 +45,7 @@ Route::prefix('client')->name('api.client.')->middleware('auth:sanctum')->group(
     Route::get('/new', [ClientController::class, 'newdashboard'])->name('newdashboard');
     Route::get('/dashboard', [ClientController::class, 'clientdashboard'])->name('dashboard');
     Route::get('/business-plan', [ClientController::class, 'bplan'])->name('bplan');
-    Route::get('/business-plan/create', [BusinessPlanController::class, 'addpblan'])->name('addpblan');
+    Route::post('/business-plan/create', [BusinessPlanController::class, 'addpblan'])->name('addpblan');
     Route::get('/business-plan/{id}/edit', [BusinessPlanController::class, 'editpblan'])->name('editpblan');
     Route::post('/business-plan', [BusinessPlanController::class, 'store'])->name('storepblan');
     Route::put('/business-plan/{id}', [BusinessPlanController::class, 'update'])->name('updatepblan');

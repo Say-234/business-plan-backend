@@ -1,0 +1,932 @@
+name: Authentification
+description: 'Cette route retourne les informations pour la page de réinitialisation de mot de passe.'
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/forgetpassword
+    metadata:
+      groupName: Authentification
+      groupDescription: 'Cette route retourne les informations pour la page de réinitialisation de mot de passe.'
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Afficher la page de réinitialisation de mot de passe.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Page de réinitialisation de mot de passe"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/sendotp
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet d'envoyer un code OTP (One-Time Password) à l'adresse email
+        spécifiée pour la réinitialisation du mot de passe.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Envoyer un code OTP par email.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: "requis L'adresse email pour recevoir l'OTP. Exemple: jean@example.com"
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: qkunze@example.com
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Code OTP envoyé avec succès"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Utilisateur non trouvé"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur lors de l'envoi de l'email",
+            "error": "Message d'erreur détaillé"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/verifyotp
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet de vérifier la validité d'un code OTP envoyé par email
+        pour la réinitialisation du mot de passe.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Vérifier un code OTP.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: "requis L'adresse email associée à l'OTP. Exemple: jean@example.com"
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      otp:
+        name: otp
+        description: 'requis Le code OTP à vérifier. Exemple: 123456'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: qkunze@example.com
+      otp: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Code OTP valide"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "success": false,
+            "message": "Code OTP invalide ou expiré"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Utilisateur non trouvé"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/resetpassword
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet de réinitialiser le mot de passe d'un utilisateur
+        après vérification du code OTP.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Réinitialiser le mot de passe.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: "requis L'adresse email de l'utilisateur. Exemple: jean@example.com"
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'requis Le nouveau mot de passe (min 8 caractères, majuscules, minuscules, chiffres, symboles). Exemple: MonMotDePasse123!'
+        required: false
+        example: 'O[2UZ5ij-e/dl4m{o,'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'requis Confirmation du nouveau mot de passe. Exemple: MonMotDePasse123!'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: qkunze@example.com
+      password: 'O[2UZ5ij-e/dl4m{o,'
+      password_confirmation: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Une erreur est survenue. Veuillez recommencer le processus."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": "Erreur de validation",
+            "errors": {
+              "password": ["Le mot de passe doit contenir au moins 8 caractères"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Une erreur est survenue lors de la réinitialisation du mot de passe",
+            "error": "Message d'erreur détaillé"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/auth/google
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route redirige l'utilisateur vers la page d'authentification Google
+        pour autoriser l'accès à l'application.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Rediriger vers Google pour l'authentification."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 302
+        content: '"Redirection vers la page d''authentification Google"'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/auth/google/callback
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route traite le retour de Google après authentification.
+        Elle crée ou connecte l'utilisateur selon son statut.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Traiter le retour de l'authentification Google."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "user": {
+              "id": 1,
+              "name": "John Doe",
+              "email": "john@gmail.com",
+              "google_id": "123456789"
+            },
+            "message": "Authentification Google réussie"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "error": true,
+            "message": "Erreur lors de l'authentification Google"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: auth/google/callback
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route traite le retour de Google après authentification.
+        Elle crée ou connecte l'utilisateur selon son statut.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Traiter le retour de l'authentification Google."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "user": {
+              "id": 1,
+              "name": "John Doe",
+              "email": "john@gmail.com",
+              "google_id": "123456789"
+            },
+            "message": "Authentification Google réussie"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "error": true,
+            "message": "Erreur lors de l'authentification Google"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: register
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet d'inscrire un nouvel utilisateur avec son email.
+        Un mot de passe aléatoire est généré et envoyé par email.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Inscription d'un nouvel utilisateur."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: "requis L'adresse email de l'utilisateur. Exemple: user@example.com"
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: qkunze@example.com
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: '"Inscription réussie, utilisateur connecté automatiquement"'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "email": ["Cette adresse email est déjà utilisée"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "message": "Erreur lors de l'inscription"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: login
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet à un utilisateur de se connecter avec ses identifiants.
+        Une session authentifiée est créée en cas de succès.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Connexion utilisateur.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: "requis L'adresse email de l'utilisateur. Exemple: user@example.com"
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: "requis Le mot de passe de l'utilisateur. Exemple: motdepasse123"
+        required: false
+        example: 'O[2UZ5ij-e/dl4m{o,'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: qkunze@example.com
+      password: 'O[2UZ5ij-e/dl4m{o,'
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: '"Connexion réussie, session créée"'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "email": ["Ces identifiants ne correspondent pas à nos enregistrements"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: forgot-password
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet d'envoyer un lien de réinitialisation de mot de passe
+        à l'adresse email spécifiée si elle existe en base de données.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Envoyer un lien de réinitialisation de mot de passe.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: "requis L'adresse email de l'utilisateur. Exemple: user@example.com"
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      email: qkunze@example.com
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "status": "Nous avons envoyé votre lien de réinitialisation de mot de passe par email !"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "email": ["Nous ne trouvons pas d'utilisateur avec cette adresse email"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: reset-password
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet de réinitialiser le mot de passe d'un utilisateur
+        à l'aide du token reçu par email.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Réinitialiser le mot de passe.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      token:
+        name: token
+        description: 'requis Le token de réinitialisation reçu par email. Exemple: abc123token'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      email:
+        name: email
+        description: "requis L'adresse email de l'utilisateur. Exemple: user@example.com"
+        required: false
+        example: qkunze@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password:
+        name: password
+        description: 'requis Le nouveau mot de passe. Exemple: nouveaumotdepasse123'
+        required: false
+        example: 'O[2UZ5ij-e/dl4m{o,'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'requis Confirmation du nouveau mot de passe. Exemple: nouveaumotdepasse123'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      token: consequatur
+      email: qkunze@example.com
+      password: 'O[2UZ5ij-e/dl4m{o,'
+      password_confirmation: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "status": "Votre mot de passe a été réinitialisé !"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "email": ["Ce token de réinitialisation de mot de passe est invalide"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'verify-email/{id}/{hash}'
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet de vérifier l'adresse email de l'utilisateur à partir
+        du lien reçu par email. L'utilisateur est redirigé vers le dashboard.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Vérifier l'adresse email de l'utilisateur."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "requis L'ID de l'utilisateur. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      hash:
+        name: hash
+        description: 'requis Le hash de vérification. Exemple: abc123'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 17
+      hash: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 302
+        content: '"Redirection vers le dashboard avec paramètre verified=1"'
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+          set-cookie: 'XSRF-TOKEN=eyJpdiI6IndsMUVyNEtWR0dDdjI2VEZxKzlNQXc9PSIsInZhbHVlIjoicEM0R1NTcGVyN0hxNENBeDNubW5qbHA0L1ZGOW8vaGpLbnJsTml4ZFBoYzc5RGl5Z1FBODdleDhFUjlMK2RDZUcydlpSUjRiTGlSc09FVTRNanB6bDU2bWlOaGhtcHlJS2VVVFMvd09tL2NURkdlNWVRU2t5a3J0ei9OQWZNdGUiLCJtYWMiOiI1MjE1NzFlZjczMTM0ZDU1NWI4YjQyMTM0MmQ1NWUwMjViMTg0MTlkZjY5ZmZiOTU5Y2Q3NzhhYWRkZTI3MTRiIiwidGFnIjoiIn0%3D; expires=Mon, 21 Jul 2025 18:13:58 GMT; Max-Age=7200; path=/; samesite=lax; laravel_session=eyJpdiI6ImlZVHE0RHdxeE9qRDljeXBqY3gzaHc9PSIsInZhbHVlIjoiSHM2ZnhSUSs2VGFXT0d4TTdPdmVMaC9lTzJmQWVLdDE2VnhvSXZuY29ERjg5Y1Z4ZmI2NTRtOGNDcm1wL3NaS01MQnZQSSsxaG5pYlQyNFpJN3JIK2tpVC9IVGhqOTBGWUI4Rm1RUDRrMlBoejRicFJ6eWNBNDFRVnFwV2E2czgiLCJtYWMiOiIyNzEyMTljY2VlMjc4ZDFjNjgyY2UyOGFlMzY1ZDUxMWFkNWU3ZTg0NTI2ODM1ODljNjQ3MjQ2ZGQ5MGY3MzNiIiwidGFnIjoiIn0%3D; expires=Mon, 21 Jul 2025 18:13:58 GMT; Max-Age=7200; path=/; httponly; samesite=lax'
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: email/verification-notification
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet de renvoyer un email de vérification à l'utilisateur connecté
+        si son email n'est pas encore vérifié.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Renvoyer un email de vérification.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "status": "verification-link-sent"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 302
+        content: '"Redirection vers /dashboard si l''email est déjà vérifié"'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: logout
+    metadata:
+      groupName: Authentification
+      groupDescription: |-
+        Cette route permet à un utilisateur connecté de se déconnecter.
+        La session est invalidée et le token CSRF régénéré.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Déconnexion utilisateur.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 204
+        content: '"Déconnexion réussie, session invalidée"'
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

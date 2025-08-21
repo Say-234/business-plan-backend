@@ -9,6 +9,25 @@ use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    /**
+     * Afficher la page des projets.
+     *
+     * @group Projets
+     *
+     * Cette route affiche la page des projets avec le nombre
+     * de notifications non lues de l'utilisateur connecté.
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "notificationcount": 2
+     *   }
+     * }
+     * @response 401 {
+     *   "success": false,
+     *   "message": "Utilisateur non authentifié"
+     * }
+     */
     public function index()
     {
         if (!Auth::check()) {

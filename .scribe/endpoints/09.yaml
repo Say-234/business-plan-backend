@@ -1,0 +1,684 @@
+name: Finances
+description: |-
+  Cette route retourne les informations de base pour la page des finances
+  avec le nombre de notifications non lues de l'utilisateur.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/client/finance
+    metadata:
+      groupName: Finances
+      groupDescription: |-
+        Cette route retourne les informations de base pour la page des finances
+        avec le nombre de notifications non lues de l'utilisateur.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Afficher la page des finances.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "notificationcount": 3
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error retrieving data: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/client/finances/{id}'
+    metadata:
+      groupName: Finances
+      groupDescription: |-
+        Cette route récupère toutes les données financières d'un document spécifique,
+        y compris le calcul automatique du flux de trésorerie sur 12 mois.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Récupérer les données financières d'un document."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: "requis L'ID du document. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "id": 1,
+              "document_id": 1,
+              "produits": [],
+              "capital_demarrage": {},
+              "vente_previsionnels": [],
+              "emprunts": [],
+              "cash_flow": {
+                "encaissements": {},
+                "decaissements": {},
+                "totaux": {}
+              }
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "success": false,
+            "message": "Aucune donnée financière trouvée pour ce document"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/finance/produit
+    metadata:
+      groupName: Finances
+      groupDescription: |-
+        Cette route permet d'ajouter un nouveau produit avec ses coûts détaillés
+        (matières premières, main d'œuvre, coûts indirects) à un document.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Ajouter un produit financier.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      document_id:
+        name: document_id
+        description: "requis L'ID du document. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      produits:
+        name: produits
+        description: 'requis Les données du produit au format JSON. Exemple: {"nom":"Produit A","matieres_premieres":[{"designation":"Matière 1","quantite":10,"prix_unitaire":5,"sous_total":50}],"main_doeuvre_directe":[{"designation":"Ouvrier","heures":8,"taux_horaire":15,"sous_total":120}],"couts_indirects":[{"designation":"Electricité","montant":30,"sous_total":30}]}'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      document_id: 17
+      produits: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Produit ajouté avec succès",
+            "data": {
+              "produit": {
+                "nom": "Produit A",
+                "total_matieres_premieres_ht": 50,
+                "total_main_doeuvre_directe_ht": 120,
+                "total_couts_indirects_ht": 30,
+                "total_ht": 200
+              },
+              "produits_total": 200
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": "Validation error",
+            "errors": {
+              "document_id": ["Le champ document_id est requis"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error storing produit: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/finance/capitaldemarrage
+    metadata:
+      groupName: Finances
+      groupDescription: |-
+        Cette route permet d'ajouter des frais de pré-exploitation au capital de démarrage
+        d'un document. Ces frais sont nécessaires avant le lancement de l'activité.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Ajouter des frais de pré-exploitation.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      document_id:
+        name: document_id
+        description: "requis L'ID du document. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      preexploitation:
+        name: preexploitation
+        description: 'requis Les données de pré-exploitation au format JSON. Exemple: {"designation":"Frais de constitution","montant":1500,"sous_total":1500}'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      document_id: 17
+      preexploitation: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Pré-exploitation ajoutée avec succès",
+            "data": {
+              "preexploitation": {
+                "designation": "Frais de constitution",
+                "montant": 1500,
+                "total_ht": 1500
+              },
+              "capital_demarrage_total": 1500
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": "Validation error",
+            "errors": {
+              "document_id": ["Le champ document_id est requis"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error storing preexploitation: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/finance/immobilisation
+    metadata:
+      groupName: Finances
+      groupDescription: |-
+        Cette route permet d'ajouter une immobilisation (matériel, équipement, etc.)
+        au capital de démarrage d'un document.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Ajouter une immobilisation.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      document_id:
+        name: document_id
+        description: "requis L'ID du document. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      immobilisation:
+        name: immobilisation
+        description: 'requis Les données d''immobilisation au format JSON. Exemple: {"designation":"Ordinateur","quantite":2,"prix_unitaire":800,"sous_total":1600}'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      document_id: 17
+      immobilisation: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Immobilisation ajoutée avec succès",
+            "data": {
+              "immobilisation": {
+                "designation": "Ordinateur",
+                "quantite": 2,
+                "prix_unitaire": 800,
+                "total_ht": 1600
+              },
+              "capital_demarrage_total": 1600
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": "Validation error",
+            "errors": {
+              "document_id": ["Le champ document_id est requis"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error storing immobilisation: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/finance/fondsderoulement
+    metadata:
+      groupName: Finances
+      groupDescription: |-
+        Cette route permet d'ajouter des fonds de roulement nécessaires
+        au fonctionnement quotidien de l'entreprise.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Ajouter des fonds de roulement.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      document_id:
+        name: document_id
+        description: "requis L'ID du document. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      fonds_de_roulement:
+        name: fonds_de_roulement
+        description: 'requis Les données de fonds de roulement au format JSON. Exemple: {"designation":"Stock initial","montant":5000,"sous_total":5000}'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      document_id: 17
+      fonds_de_roulement: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Fonds de roulement ajouté avec succès",
+            "data": {
+              "fonds_de_roulement": {
+                "designation": "Stock initial",
+                "montant": 5000,
+                "total_ht": 5000
+              },
+              "capital_demarrage_total": 5000
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": "Validation error",
+            "errors": {
+              "document_id": ["Le champ document_id est requis"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error storing fonds de roulement: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/client/finance/vente
+    metadata:
+      groupName: Finances
+      groupDescription: |-
+        Cette route permet d'ajouter une nouvelle vente prévisionnelle
+        avec ses produits et paramètres de paiement.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Ajouter une vente prévisionnelle.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      document_id:
+        name: document_id
+        description: "requis L'ID du document. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      vente_previsionnelle:
+        name: vente_previsionnelle
+        description: 'requis Les données de la vente au format JSON. Exemple: {"date_debut":"2024-01-01","duree_mois":12,"delai_paiement":30,"produits":[{"nom":"Produit A","quantite":100,"prix_unitaire":50}]}'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      document_id: 17
+      vente_previsionnelle: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "message": "Vente prévisionnelle ajoutée avec succès",
+            "data": {
+              "vente": {
+                "date_debut": "2024-01-01",
+                "duree_mois": 12,
+                "total_produits_ht": 5000,
+                "delai_paiement": 30,
+                "produits": [{"nom": "Produit A", "quantite": 100, "prix_unitaire": 50}]
+              },
+              "ventes_total": 5000
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: |-
+          {
+            "success": false,
+            "message": "Unauthorized"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "success": false,
+            "message": "Validation error",
+            "errors": {
+              "document_id": ["Le champ document_id est requis"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "success": false,
+            "message": "Error storing vente: message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

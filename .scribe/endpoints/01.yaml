@@ -1,0 +1,157 @@
+name: 'Notifications Push'
+description: |-
+  Cette route permet d'envoyer une notification push à l'utilisateur connecté
+  via Firebase Cloud Messaging et de l'enregistrer en base de données.
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/send-notif
+    metadata:
+      groupName: 'Notifications Push'
+      groupDescription: |-
+        Cette route permet d'envoyer une notification push à l'utilisateur connecté
+        via Firebase Cloud Messaging et de l'enregistrer en base de données.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Envoyer une notification push.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'requis Le titre de la notification. Exemple: Nouvelle mise à jour'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      body:
+        name: body
+        description: 'requis Le contenu de la notification. Exemple: Votre business plan a été mis à jour'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      data:
+        name: data
+        description: 'optionnel Données additionnelles. Exemple: {"action":"open_document","document_id":1}'
+        required: false
+        example:
+          - consequatur
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        custom: []
+    cleanBodyParameters:
+      title: consequatur
+      body: consequatur
+      data:
+        - consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "success": true
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "title": ["Le champ title est requis"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/fcm-token
+    metadata:
+      groupName: 'Notifications Push'
+      groupDescription: |-
+        Cette route permet d'enregistrer le token Firebase Cloud Messaging
+        de l'utilisateur pour recevoir des notifications push.
+      subgroup: ''
+      subgroupDescription: ''
+      title: "Enregistrer le token FCM de l'utilisateur."
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      fcm_token:
+        name: fcm_token
+        description: "requis Le token FCM de l'appareil. Exemple: eXample_token_123"
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanBodyParameters:
+      fcm_token: consequatur
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Token enregistré"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "fcm_token": ["Le champ fcm_token est requis"]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

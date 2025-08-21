@@ -21,6 +21,28 @@ class PushNotificationController extends Controller
         $this->firebaseService = $firebaseService;
     }
 
+    /**
+     * Envoyer une notification push.
+     *
+     * @group Notifications Push
+     *
+     * Cette route permet d'envoyer une notification push à l'utilisateur connecté
+     * via Firebase Cloud Messaging et de l'enregistrer en base de données.
+     *
+     * @bodyParam title string requis Le titre de la notification. Exemple: Nouvelle mise à jour
+     * @bodyParam body string requis Le contenu de la notification. Exemple: Votre business plan a été mis à jour
+     * @bodyParam data array optionnel Données additionnelles. Exemple: {"action":"open_document","document_id":1}
+     *
+     * @response 200 {
+     *   "success": true
+     * }
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "title": ["Le champ title est requis"]
+     *   }
+     * }
+     */
     public function sendPushNotification(Request $request)
     {
         $request->validate([
@@ -46,6 +68,26 @@ class PushNotificationController extends Controller
         return response()->json(['success' => true]);
     }
 
+    /**
+     * Enregistrer le token FCM de l'utilisateur.
+     *
+     * @group Notifications Push
+     *
+     * Cette route permet d'enregistrer le token Firebase Cloud Messaging
+     * de l'utilisateur pour recevoir des notifications push.
+     *
+     * @bodyParam fcm_token string requis Le token FCM de l'appareil. Exemple: eXample_token_123
+     *
+     * @response 200 {
+     *   "message": "Token enregistré"
+     * }
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "fcm_token": ["Le champ fcm_token est requis"]
+     *   }
+     * }
+     */
     public function getToken(Request $request)
     {
         $request->validate([
@@ -73,6 +115,23 @@ class PushNotificationController extends Controller
         return response()->json(['message' => 'Token enregistré']);
     }
 
+    /**
+     * Marquer une notification comme lue.
+     *
+     * @group Notifications Push
+     *
+     * Cette route permet de marquer une notification spécifique comme lue
+     * pour l'utilisateur connecté.
+     *
+     * @bodyParam notification_id integer requis L'ID de la notification. Exemple: 1
+     *
+     * @response 200 {
+     *   "message": "Notification marquée comme lue"
+     * }
+     * @response 404 {
+     *   "message": "Notification introuvable"
+     * }
+     */
     public function markNotificationAsRead(Request $request)
     {
         $notification_id = $request->notification_id;

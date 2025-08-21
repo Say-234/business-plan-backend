@@ -11,7 +11,24 @@ use Illuminate\Validation\ValidationException;
 class PasswordResetLinkController extends Controller
 {
     /**
-     * Handle an incoming password reset link request.
+     * Envoyer un lien de réinitialisation de mot de passe.
+     *
+     * @group Authentification
+     *
+     * Cette route permet d'envoyer un lien de réinitialisation de mot de passe
+     * à l'adresse email spécifiée si elle existe en base de données.
+     *
+     * @bodyParam email string requis L'adresse email de l'utilisateur. Exemple: user@example.com
+     *
+     * @response 200 {
+     *   "status": "Nous avons envoyé votre lien de réinitialisation de mot de passe par email !"
+     * }
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "email": ["Nous ne trouvons pas d'utilisateur avec cette adresse email"]
+     *   }
+     * }
      *
      * @throws \Illuminate\Validation\ValidationException
      */

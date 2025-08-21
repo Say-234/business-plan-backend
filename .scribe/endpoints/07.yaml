@@ -1,0 +1,170 @@
+name: Paiement
+description: |-
+  Cette route permet d'initier un paiement pour le téléchargement d'un business plan
+  via FedaPay. L'utilisateur sera redirigé vers la page de paiement FedaPay.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/client/paiement
+    metadata:
+      groupName: Paiement
+      groupDescription: |-
+        Cette route permet d'initier un paiement pour le téléchargement d'un business plan
+        via FedaPay. L'utilisateur sera redirigé vers la page de paiement FedaPay.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Initier un paiement.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          {
+            "message": "Redirection vers la page de paiement FedaPay"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 302
+        content: |-
+          {
+            "message": "Redirection avec erreur en cas d'échec",
+            "error": "Une erreur est survenue : message d'erreur"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/client/payment-success
+    metadata:
+      groupName: Paiement
+      groupDescription: |-
+        Cette route traite le retour de paiement depuis FedaPay après qu'un utilisateur
+        ait effectué ou annulé un paiement. Elle vérifie le statut de la transaction
+        et met à jour les données en conséquence.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Traiter le retour de paiement.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      paiement_id:
+        name: paiement_id
+        description: "requis L'ID du paiement. Exemple: 1"
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanUrlParameters:
+      paiement_id: 17
+    queryParameters:
+      id:
+        name: id
+        description: "requis L'ID de la transaction FedaPay. Exemple: trans_123456"
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+      status:
+        name: status
+        description: 'requis Le statut de la transaction. Exemple: approved'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        custom: []
+    cleanQueryParameters:
+      id: consequatur
+      status: consequatur
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 302
+        content: |-
+          {
+            "message": "Redirection avec succès",
+            "success": "Votre paiement a été traité avec succès."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 302
+        content: |-
+          {
+            "message": "Redirection avec erreur",
+            "error": "La transaction a été annulée."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 302
+        content: |-
+          {
+            "message": "Redirection avec erreur",
+            "error": "Transaction introuvable."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

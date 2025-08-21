@@ -24,3 +24,5 @@ Homestead.yaml
 npm-debug.log
 Thumbs.db
 yarn-error.log
+# Firebase secrets
+storage/businessplan-f556a-firebase-adminsdk-fbsvc-6516b0bc38.json

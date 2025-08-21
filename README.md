@@ -44,6 +44,96 @@ We would like to extend our thanks to the following sponsors for funding Laravel
 - **[Redberry](https://redberry.international/laravel-development)**
 - **[Active Logic](https://activelogic.com)**
 
+## 📚 Documentation API
+
+Cette application dispose d'une documentation API complète générée avec **Scribe**. L'API est entièrement documentée en français et couvre tous les endpoints disponibles.
+
+### 🚀 Générer la documentation
+
+Pour générer la documentation API, exécutez la commande suivante :
+
+```bash
+php artisan scribe:generate
+```
+
+### 🌐 Accéder à la documentation
+
+Après génération, la documentation sera disponible aux URLs suivantes :
+
+- **Documentation web interactive** : `http://votre-domaine.com/docs`
+- **Fichier HTML** : `public/docs/index.html`
+- **Collection Postman** : `public/docs/collection.json`
+
+### 📋 Endpoints disponibles
+
+L'API couvre les modules suivants :
+
+#### 🔐 **Authentification**
+- Inscription et connexion
+- Vérification email
+- Réinitialisation mot de passe
+- Authentification Google
+
+#### 👤 **Gestion Utilisateur**
+- Profil utilisateur
+- Notifications
+- Projets
+
+#### 💰 **Finances** (API complète)
+- Gestion des produits financiers
+- Capital de démarrage (pré-exploitation, immobilisations, fonds de roulement)
+- Ventes prévisionnelles
+- Emprunts et financements
+- Calcul automatique du flux de trésorerie
+
+#### 📊 **Évaluation**
+- Évaluation de documents
+- Génération de réponses IA
+
+#### 🤖 **Intelligence Artificielle**
+- Génération de contenu
+- Assistance business plan
+
+#### 📄 **Documents**
+- Business plans
+- CV et lettres de motivation
+- Partenaires
+
+#### 💳 **Paiements**
+- Intégration FedaPay
+- Gestion des transactions
+
+### 🔧 Configuration Scribe
+
+La configuration Scribe se trouve dans `config/scribe.php`. Les principales fonctionnalités :
+
+- **Documentation en français** avec exemples détaillés
+- **Groupes logiques** pour organiser les endpoints
+- **Exemples de requêtes et réponses** pour chaque endpoint
+- **Authentification** documentée pour les endpoints protégés
+- **Codes de statut HTTP** avec descriptions
+
+### 📝 Exemple d'utilisation
+
+```bash
+# Générer la documentation
+php artisan scribe:generate
+
+# Servir l'application
+php artisan serve
+
+# Accéder à la documentation
+# Ouvrir http://localhost:8000/docs dans votre navigateur
+```
+
+### 🔄 Mise à jour de la documentation
+
+La documentation se met à jour automatiquement à chaque modification des docblocks dans les contrôleurs. Pour régénérer manuellement :
+
+```bash
+php artisan scribe:generate --force
+```
+
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).

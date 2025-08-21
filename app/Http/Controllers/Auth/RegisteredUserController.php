@@ -14,11 +14,31 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegisterMailable;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegisterMailable;
 
 class RegisteredUserController extends Controller
 {
     /**
-     * Handle an incoming registration request.
+     * Inscription d'un nouvel utilisateur.
+     *
+     * @group Authentification
+     *
+     * Cette route permet d'inscrire un nouvel utilisateur avec son email.
+     * Un mot de passe aléatoire est généré et envoyé par email.
+     *
+     * @bodyParam email string requis L'adresse email de l'utilisateur. Exemple: user@example.com
+     *
+     * @response 204 "Inscription réussie, utilisateur connecté automatiquement"
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "email": ["Cette adresse email est déjà utilisée"]
+     *   }
+     * }
+     * @response 500 {
+     *   "message": "Erreur lors de l'inscription"
+     * }
      *
      * @throws \Illuminate\Validation\ValidationException
      */

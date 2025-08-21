@@ -12,7 +12,23 @@ use Illuminate\Support\Facades\Auth;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Handle an incoming authentication request.
+     * Connexion utilisateur.
+     *
+     * @group Authentification
+     *
+     * Cette route permet à un utilisateur de se connecter avec ses identifiants.
+     * Une session authentifiée est créée en cas de succès.
+     *
+     * @bodyParam email string requis L'adresse email de l'utilisateur. Exemple: user@example.com
+     * @bodyParam password string requis Le mot de passe de l'utilisateur. Exemple: motdepasse123
+     *
+     * @response 204 "Connexion réussie, session créée"
+     * @response 422 {
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "email": ["Ces identifiants ne correspondent pas à nos enregistrements"]
+     *   }
+     * }
      */
     public function store(LoginRequest $request): Response|JsonResponse
     {
@@ -34,7 +50,14 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Destroy an authenticated session.
+     * Déconnexion utilisateur.
+     *
+     * @group Authentification
+     *
+     * Cette route permet à un utilisateur connecté de se déconnecter.
+     * La session est invalidée et le token CSRF régénéré.
+     *
+     * @response 204 "Déconnexion réussie, session invalidée"
      */
     public function destroy(Request $request): Response|JsonResponse
     {

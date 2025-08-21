@@ -10,6 +10,54 @@ use LucianoTonet\GroqPHP\Groq;
 
 class AIController extends Controller
 {
+    /**
+     * Évaluer un projet entrepreneurial avec l'IA.
+     *
+     * @group Intelligence Artificielle
+     *
+     * Cette route permet d'analyser un projet entrepreneurial en utilisant l'IA pour fournir
+     * une évaluation détaillée avec points positifs, négatifs et recommandations d'amélioration.
+     *
+     * @bodyParam age integer requis L'âge du porteur de projet. Exemple: 30
+     * @bodyParam situation string requis La situation professionnelle actuelle. Exemple: Salarié
+     * @bodyParam diplome string requis Si l'activité correspond au diplôme/parcours. Exemple: Oui
+     * @bodyParam experience string requis L'expérience professionnelle en lien avec le projet. Exemple: 5 ans
+     * @bodyParam soutien string requis Le soutien de l'entourage. Exemple: Oui
+     * @bodyParam department string requis Le département d'implantation. Exemple: Paris
+     * @bodyParam motivation string requis La motivation pour le choix du département. Exemple: Marché porteur
+     * @bodyParam change_region string requis Prêt à changer de région. Exemple: Non
+     * @bodyParam project string requis Description du projet. Exemple: Application mobile
+     * @bodyParam reason string requis Raison du projet entrepreneurial. Exemple: Passion
+     * @bodyParam alone_team string requis Seul ou en équipe. Exemple: En équipe
+     * @bodyParam echeance string requis Échéance de création. Exemple: 6 mois
+     * @bodyParam employe integer requis Nombre d'emplois créés au démarrage. Exemple: 2
+     * @bodyParam employe_three integer requis Nombre d'emplois créés à 3 ans. Exemple: 10
+     * @bodyParam investment_amount integer requis Montant d'investissement en FCFA. Exemple: 5000000
+     * @bodyParam investment_share integer requis Part d'apport personnel en %. Exemple: 30
+     * @bodyParam finance string requis Mode de financement. Exemple: Prêt bancaire
+     * @bodyParam activity string requis Secteur d'activité. Exemple: Technologie
+     * @bodyParam development_stage string requis Stade de développement. Exemple: Prototype
+     * @bodyParam marketing_condition string requis Condition de commercialisation. Exemple: B2B
+     * @bodyParam season string requis Saisonnalité. Exemple: Non saisonnier
+     * @bodyParam eco_modal string requis Modèle économique. Exemple: Freemium
+     * @bodyParam start_strategy string requis Stratégie de démarrage. Exemple: MVP
+     * @bodyParam market_qualification string requis Qualification du marché. Exemple: Marché de niche
+     * @bodyParam market_geography string requis Géographie du marché. Exemple: National
+     * @bodyParam clients_identified string requis Clients identifiés. Exemple: PME
+     * @bodyParam client_knowledge string requis Connaissance des clients. Exemple: Bonne
+     * @bodyParam competitors_identified string requis Concurrents identifiés. Exemple: 3 principaux
+     * @bodyParam suppliers_identified string requis Fournisseurs identifiés. Exemple: 5 fournisseurs
+     * @bodyParam supplier_characteristics string requis Caractéristiques des fournisseurs. Exemple: Locaux
+     *
+     * @response 200 {
+     *   "positifs": "Le projet présente une forte cohérence avec votre profil...",
+     *   "negatifs": "Le marché semble saturé dans cette région...",
+     *   "ameliorations": "Il serait recommandé de diversifier les sources de financement..."
+     * }
+     * @response 500 {
+     *   "error": "Erreur lors de l'analyse du projet"
+     * }
+     */
     public function askQuestion($age, $situation, $diplome, $experience, $soutien, $department, $motivation, $change_region, $project, $reason, $alone_team, $echeance, $employe, $employe_three, $investment_amount, $investment_share, $finance, $activity, $development_stage, $marketing_condition, $season, $eco_modal, $start_strategy, $market_qualification, $market_geography, $clients_identified, $client_knowledge, $competitors_identified, $suppliers_identified, $supplier_characteristics)
     {
         $client = new Client();
