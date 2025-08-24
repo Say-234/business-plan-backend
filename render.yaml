@@ -1,0 +1,58 @@
+services:
+  - type: web
+    name: business-plan-backend
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        value: https://business-plan-backend.onrender.com
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        fromDatabase:
+          name: business-plan-db
+          property: connectionString.Host
+      - key: DB_PORT
+        fromDatabase:
+          name: business-plan-db
+          property: connectionString.Port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: business-plan-db
+          property: connectionString.Database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: business-plan-db
+          property: connectionString.Username
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: business-plan-db
+          property: connectionString.Password
+
+# Configuration de la base de données (si nécessaire)
+databases:
+  - name: business-plan-db
+    plan: free
+    engine: mysql
+    version: "8.0"
+
+# Variables d'environnement pour la base de données locale (pour le développement)
+# Ces variables seront utilisées si vous exécutez en local avec docker-compose
+# et seront écrasées par les valeurs de la base de données Render en production
+#  - key: DB_HOST
+#    value: db
+#  - key: DB_PORT
+#    value: 3306
+#  - key: DB_DATABASE
+#    value: laravel
+#  - key: DB_USERNAME
+#    value: laravel
+#  - key: DB_PASSWORD
+#    value: password

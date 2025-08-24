@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     libzip-dev \
     libonig-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Nettoyer le cache apt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -27,18 +28,29 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copier les fichiers de l'application
-COPY . .
-
 # Configurer Apache
-# Activer mod_rewrite
 RUN a2enmod rewrite
-# Remplacer la configuration Apache par défaut pour pointer vers le dossier public de Laravel
 COPY .docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Donner les bonnes permissions aux dossiers de Laravel
+# Copier uniquement les fichiers nécessaires pour l'installation des dépendances
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress --no-interaction
+
+# Copier le reste de l'application
+COPY . .
+
+# Configurer les permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Générer la clé d'application et le cache
+RUN php artisan key:generate
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+
 # Exposer le port 80 et démarrer Apache
 EXPOSE 80
+
+# Commande de démarrage
+CMD ["apache2-foreground"]
