@@ -8,7 +8,7 @@ WORKDIR /var/www/html
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
-    libjpeg62-turbo-dev \
+    libjpeg-dev \
     libfreetype6-dev \
     locales \
     zip \
@@ -38,15 +38,21 @@ COPY composer.json composer.lock ./
 # Avant la commande composer install, ajoutez :
     ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Installer les dépendances en ignorant les erreurs de plateforme
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress --no-interaction --ignore-platform-reqs
-
 # Copier le reste de l'application
 COPY . .
 
 # Configurer les permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Set up .env
+RUN if [ ! -f .env ]; then \
+        cp .env.example .env; \
+        chmod 777 .env; \
+    fi
+
+# Installer les dépendances en ignorant les erreurs de plateforme
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress --no-interaction --ignore-platform-reqs
 
 # Générer la clé d'application et le cache
 RUN php artisan key:generate
