@@ -1,8 +1,8 @@
 services:
   - type: web
     name: business-plan-backend
-    env: docker
     plan: free
+    runtime: docker
     dockerfilePath: ./Dockerfile
     envVars:
       - key: APP_ENV
@@ -36,23 +36,11 @@ services:
           name: business-plan-db
           property: connectionString.Password
 
-# Configuration de la base de données (si nécessaire)
 databases:
   - name: business-plan-db
     plan: free
-    engine: mysql
-    version: "8.0"
+    # La configuration de la base de données se fait via l'interface de Render
+    # Les propriétés engine et version sont gérées automatiquement
 
-# Variables d'environnement pour la base de données locale (pour le développement)
-# Ces variables seront utilisées si vous exécutez en local avec docker-compose
-# et seront écrasées par les valeurs de la base de données Render en production
-#  - key: DB_HOST
-#    value: db
-#  - key: DB_PORT
-#    value: 3306
-#  - key: DB_DATABASE
-#    value: laravel
-#  - key: DB_USERNAME
-#    value: laravel
-#  - key: DB_PASSWORD
-#    value: password
+# Note: Pour la configuration de la base de données en développement local,
+# utilisez un fichier .env séparé qui n'est pas versionné.
