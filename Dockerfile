@@ -35,6 +35,9 @@ COPY .docker/apache/000-default.conf /etc/apache2/sites-available/000-default.co
 # Copier uniquement les fichiers nécessaires pour l'installation des dépendances
 COPY composer.json composer.lock ./
 
+# Avant la commande composer install, ajoutez :
+    ENV COMPOSER_ALLOW_SUPERUSER=1
+
 # Installer les dépendances en ignorant les erreurs de plateforme
 RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress --no-interaction --ignore-platform-reqs
 
