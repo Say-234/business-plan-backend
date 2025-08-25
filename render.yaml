@@ -4,6 +4,7 @@ services:
     plan: free
     runtime: docker
     dockerfilePath: ./Dockerfile
+    buildCommand: php artisan migrate --force
     envVars:
       - key: APP_ENV
         value: production

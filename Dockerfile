@@ -41,9 +41,6 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Créer le fichier de base de données SQLite
-RUN mkdir -p database && touch database/database.sqlite
-
 # Installer les dépendances et générer l'autoload
 RUN composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-reqs
 
@@ -52,9 +49,6 @@ COPY .env.example .env
 
 # Générer la clé d'application
 RUN php artisan key:generate
-
-# Mettre en cache la configuration
-RUN php artisan config:cache
 
 # Exposer le port 80 et démarrer Apache
 EXPOSE 80
