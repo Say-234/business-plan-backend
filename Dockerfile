@@ -1,28 +1,20 @@
-# Utiliser l'image officielle PHP 8.2 avec Apache
 FROM php:8.2-apache
 
-# Définir le répertoire de travail
-WORKDIR /var/www/html
-
-# Installer les dépendances système et les extensions PHP nécessaires pour Laravel
+# Installer les dépendances système
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
-    locales \
+    libzip-dev \
     zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
     unzip \
     git \
     curl \
-    libzip-dev \
-    libonig-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) pdo_mysql mbstring exif pcntl bcmath gd zip
+    && docker-php-ext-install -j$(nproc) pdo_mysql gd zip
 
-# Nettoyer le cache apt
+# Nettoyer le cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installer Composer
@@ -32,36 +24,35 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN a2enmod rewrite
 COPY .docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Copier uniquement les fichiers nécessaires pour l'installation des dépendances
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers nécessaires pour l'installation des dépendances
 COPY composer.json composer.lock ./
 
-# Avant la commande composer install, ajoutez :
-    ENV COMPOSER_ALLOW_SUPERUSER=1
+# Installer les dépendances
+RUN composer install --no-scripts --no-autoloader --no-dev --no-progress --no-interaction --ignore-platform-reqs
 
-# Copier le reste de l'application
+# Copier le reste des fichiers
 COPY . .
 
 # Configurer les permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Set up .env
-RUN if [ ! -f .env ]; then \
-        cp .env.example .env; \
-        chmod 777 .env; \
-    fi
+# Créer le fichier de base de données SQLite
+RUN mkdir -p database && touch database/database.sqlite
 
-# Installer les dépendances en ignorant les erreurs de plateforme
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-progress --no-interaction --ignore-platform-reqs
+# Copier manuellement le fichier .env
+COPY .env.example .env
 
-# Générer la clé d'application et le cache
+# Générer la clé d'application
 RUN php artisan key:generate
+
+# Mettre en cache la configuration
 RUN php artisan config:cache
 RUN php artisan route:cache
-RUN php artisan view:cache
 
 # Exposer le port 80 et démarrer Apache
 EXPOSE 80
-
-# Commande de démarrage
 CMD ["apache2-foreground"]
