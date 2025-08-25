@@ -22,6 +22,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Configurer Apache
 RUN a2enmod rewrite
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 COPY .docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Définir le répertoire de travail
@@ -43,6 +44,9 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Créer le fichier de base de données SQLite
 RUN mkdir -p database && touch database/database.sqlite
 
+# Installer les dépendances et générer l'autoload
+RUN composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-reqs
+
 # Copier manuellement le fichier .env
 COPY .env.example .env
 
@@ -51,7 +55,6 @@ RUN php artisan key:generate
 
 # Mettre en cache la configuration
 RUN php artisan config:cache
-RUN php artisan route:cache
 
 # Exposer le port 80 et démarrer Apache
 EXPOSE 80
