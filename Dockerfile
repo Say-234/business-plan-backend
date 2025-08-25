@@ -44,9 +44,6 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Installer les dépendances et générer l'autoload
 RUN composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-reqs
 
-# Générer la clé d'application
-RUN php artisan key:generate
-
 # Exposer le port 80 et démarrer Apache
 EXPOSE 80
 CMD ["apache2-foreground"]

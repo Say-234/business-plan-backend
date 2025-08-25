@@ -6,6 +6,9 @@ services:
     dockerfilePath: ./Dockerfile
     buildCommand: php artisan migrate --force
     envVars:
+      - key: APP_KEY
+        value: base64:VMhFpdmFjWDEI5pLJhNJPKfk134hb2O8K6qLffSlPFo=
+    envVars:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
