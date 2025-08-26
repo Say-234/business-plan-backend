@@ -8,7 +8,6 @@ services:
     envVars:
       - key: APP_KEY
         value: base64:VMhFpdmFjWDEI5pLJhNJPKfk134hb2O8K6qLffSlPFo=
-    envVars:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
@@ -22,29 +21,24 @@ services:
       - key: DB_HOST
         fromDatabase:
           name: business-plan-db
-          property: connectionString.Host
+          property: host
       - key: DB_PORT
         fromDatabase:
           name: business-plan-db
-          property: connectionString.Port
+          property: port
       - key: DB_DATABASE
         fromDatabase:
           name: business-plan-db
-          property: connectionString.Database
+          property: database
       - key: DB_USERNAME
         fromDatabase:
           name: business-plan-db
-          property: connectionString.Username
+          property: user
       - key: DB_PASSWORD
         fromDatabase:
           name: business-plan-db
-          property: connectionString.Password
+          property: password
 
 databases:
   - name: business-plan-db
     plan: free
-    # La configuration de la base de données se fait via l'interface de Render
-    # Les propriétés engine et version sont gérées automatiquement
-
-# Note: Pour la configuration de la base de données en développement local,
-# utilisez un fichier .env séparé qui n'est pas versionné.
