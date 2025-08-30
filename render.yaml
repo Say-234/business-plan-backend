@@ -4,14 +4,14 @@ services:
     plan: free
     runtime: docker
     dockerfilePath: ./Dockerfile
-    
+
     envVars:
       - key: APP_KEY
         value: base64:VMhFpdmFjWDEI5pLJhNJPKfk134hb2O8K6qLffSlPFo=
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: "false"
+        value: "true"
       - key: APP_URL
         value: https://business-plan-backend.onrender.com
       - key: LOG_CHANNEL
