@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'firebase',
+            'provider' => 'firebase',
+        ],
     ],
 
     /*
@@ -63,6 +67,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+
+        'firebase' => [
+            'driver' => 'firebase',
+            'model' => App\Models\User::class,
         ],
 
         // 'users' => [

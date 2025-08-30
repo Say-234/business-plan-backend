@@ -19,7 +19,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\AuthController;
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+Route::middleware(['auth:api'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -41,7 +41,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/user', [AuthController::class, 'user']);
 
 // Client routes
-Route::prefix('client')->name('api.client.')->middleware('auth:sanctum')->group(function () {
+Route::prefix('client')->name('api.client.')->middleware('auth:api')->group(function () {
     Route::get('/new', [ClientController::class, 'newdashboard'])->name('newdashboard');
     Route::get('/dashboard', [ClientController::class, 'clientdashboard'])->name('dashboard');
     Route::get('/business-plan', [ClientController::class, 'bplan'])->name('bplan');
@@ -86,14 +86,14 @@ Route::prefix('client')->name('api.client.')->middleware('auth:sanctum')->group(
 });
 
 // Routes protégées
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:api')->group(function () {
     Route::get('/client', [ClientController::class, 'index']);
     Route::get('/client/dashboard', [ClientController::class, 'clientdashboard']);
     Route::get('/client/newdashboard', [ClientController::class, 'newdashboard']);
 });
 
 // Profile routes
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:api')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('api.profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('api.profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('api.profile.destroy');
