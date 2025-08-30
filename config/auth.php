@@ -41,8 +41,8 @@ return [
             'provider' => 'users',
         ],
         'api' => [
-            'driver' => 'firebase',
-            'provider' => 'firebase',
+            'driver' => 'sanctum',
+            'provider' => 'users',
         ],
     ],
 
