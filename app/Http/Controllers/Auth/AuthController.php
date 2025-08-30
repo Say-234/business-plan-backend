@@ -6,9 +6,44 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Kreait\Firebase\Auth as FirebaseAuth;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    public function exchangeFirebaseToken(Request $request, FirebaseAuth $firebaseAuth)
+    {
+        $validator = Validator::make($request->all(), [
+            'firebase_token' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        try {
+            $verifiedIdToken = $firebaseAuth->verifyIdToken($request->firebase_token);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Invalid Firebase token.'], 401);
+        }
+
+        $uid = $verifiedIdToken->claims()->get('sub');
+        $email = $verifiedIdToken->claims()->get('email');
+
+        $user = User::firstOrCreate(
+            ['google_id' => $uid],
+            ['email' => $email, 'password' => Hash::make(uniqid())] // Create a random password
+        );
+
+        $sanctumToken = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'token' => $sanctumToken,
+            'user' => $user,
+        ]);
+    }
+
     /**
      * Login the user
      *

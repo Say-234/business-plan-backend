@@ -19,6 +19,8 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\AuthController;
 
+Route::post('/auth/firebase/token', [AuthController::class, 'exchangeFirebaseToken']);
+
 Route::middleware(['auth:api'])->get('/user', function (Request $request) {
     return $request->user();
 });

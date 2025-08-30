@@ -47,4 +47,4 @@ RUN composer install --optimize-autoloader --no-dev --no-interaction --ignore-pl
 
 # Exposer le port 80 et démarrer Apache
 EXPOSE 80
-CMD ["/bin/sh", "-c", "php artisan migrate --force --no-interaction && apache2-foreground"]
+CMD ["/bin/sh", "-c", "php artisan migrate --force --no-interaction && php artisan db:seed --force && apache2-foreground"]
