@@ -4,6 +4,7 @@ services:
     plan: free
     runtime: docker
     dockerfilePath: ./Dockerfile
+    buildCommand: "php artisan migrate --force && php artisan db:seed --force"
 
     envVars:
       - key: APP_KEY
