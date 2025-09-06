@@ -23,9 +23,13 @@ RUN composer install --optimize-autoloader --no-dev
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Supprimer l'ancien fichier s'il existe
+RUN rm -f database/database.sqlite
+
 # Créer la base SQLite
 RUN touch database/database.sqlite
 RUN chmod 777 database/database.sqlite
+RUN chown -R www-data:www-data database/database.sqlite
 
 # Configurer Apache
 COPY .docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
