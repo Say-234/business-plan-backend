@@ -4,44 +4,20 @@ services:
     plan: free
     runtime: docker
     dockerfilePath: ./Dockerfile
-    buildCommand: "php artisan migrate --force && php artisan db:seed --force"
-
+    buildCommand: |
+      composer install --optimize-autoloader --no-dev
+      php artisan migrate --force
+      php artisan storage:link
     envVars:
-      - key: APP_KEY
-        value: base64:VMhFpdmFjWDEI5pLJhNJPKfk134hb2O8K6qLffSlPFo=
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: "true"
+        value: "false"
+      - key: APP_KEY
+        value: base64:VMhFpdmFjWDEI5pLJhNJPKfk134hb2O8K6qLffSlPFo=
       - key: FIREBASE_CREDENTIALS
-        value: /var/www/html/storage/businessplan-f556a-firebase-adminsdk-fbsvc-6516b0bc38.json
-      - key: APP_URL
-        value: https://business-plan-backend.onrender.com
-      - key: LOG_CHANNEL
-        value: stderr
+        value: storage/app/firebase-credentials.json
       - key: DB_CONNECTION
-        value: pgsql
-      - key: DB_HOST
-        fromDatabase:
-          name: business-plan-db
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: business-plan-db
-          property: port
+        value: sqlite
       - key: DB_DATABASE
-        fromDatabase:
-          name: business-plan-db
-          property: database
-      - key: DB_USERNAME
-        fromDatabase:
-          name: business-plan-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: business-plan-db
-          property: password
-
-databases:
-  - name: business-plan-db
-    plan: free
+        value: /var/www/html/database/database.sqlite
