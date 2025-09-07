@@ -19,15 +19,14 @@ COPY . .
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN composer install --optimize-autoloader --no-dev
 
-# Configurer les permissions du répertoire de la base de données
-RUN chmod 775 /var/www/html/database
+# S'assurer que le dossier 'database' a les permissions d'écriture
 RUN chown -R www-data:www-data /var/www/html/database
+RUN chmod -R 775 /var/www/html/database
 
-# Exécuter les migrations de la base de données.
-# `artisan` créera le fichier de base de données si nécessaire.
+# Exécuter les migrations. Artisan créera le fichier .sqlite
 RUN php artisan migrate --force
 
-# Configurer les permissions du storage et cache
+# Configurer les permissions pour 'storage' et 'cache'
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
