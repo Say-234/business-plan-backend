@@ -19,17 +19,17 @@ COPY . .
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN composer install --optimize-autoloader --no-dev
 
-# Configurer les permissions
+# Configurer les permissions du répertoire de la base de données
+RUN chmod 775 /var/www/html/database
+RUN chown -R www-data:www-data /var/www/html/database
+
+# Exécuter les migrations de la base de données.
+# `artisan` créera le fichier de base de données si nécessaire.
+RUN php artisan migrate --force
+
+# Configurer les permissions du storage et cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Supprimer l'ancien fichier s'il existe
-RUN rm -f database/database.sqlite
-
-# Créer la base SQLite
-RUN touch database/database.sqlite
-RUN chmod 777 database/database.sqlite
-RUN chown -R www-data:www-data database/database.sqlite
 
 # Configurer Apache
 COPY .docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
