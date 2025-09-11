@@ -2,11 +2,20 @@ FROM php:8.2-apache
 
 # Installer les dépendances système
 RUN apt-get update && apt-get install -y \
-    libzip-dev \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
     unzip \
-    sqlite3 \
-    libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_sqlite zip
+    libzip-dev \
+    libicu-dev \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl pdo pdo_mysql zip gd
+
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Activer les modules Apache
 RUN a2enmod rewrite
@@ -19,14 +28,7 @@ COPY . .
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN composer install --optimize-autoloader --no-dev
 
-# S'assurer que le dossier 'database' a les permissions d'écriture
-RUN chown -R www-data:www-data /var/www/html/database
-RUN chmod -R 775 /var/www/html/database
-
-# Exécuter les migrations. Artisan créera le fichier .sqlite
-RUN php artisan migrate --force
-
-# Configurer les permissions pour 'storage' et 'cache'
+# Configurer les permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 

@@ -1059,4 +1059,63 @@ class ClientController extends Controller
 
         return redirect()->route('client.addpblan')->with('error', 'La transaction a été annulé.');
     }
+
+    /**
+     * Récupérer tous les témoignages.
+     *
+     * @group Client
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *       {
+     *         "id": 1,
+     *         "nom": "Jean Dupont",
+     *         "note": 5,
+     *         "commentaire": "Excellent service"
+     *       }
+     *   ]
+     * }
+     */
+    public function getTestimonials()
+    {
+        $testimonials = Testimonial::all();
+        return response()->json($testimonials);
+    }
+
+    /**
+     * Récupérer les documents de l'utilisateur.
+     *
+     * @group Documents
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *      {
+     *          "id": 1,
+     *          "user_id": 1,
+     *          "type": "business_plan",
+     *          "status": "completed",
+     *          "created_at": "2024-01-01T10:00:00Z",
+     *          "updated_at": "2024-01-01T10:00:00Z"
+     *      }
+     *   ]
+     * }
+     * @response 401 {
+     *   "success": false,
+     *   "message": "Utilisateur non authentifié"
+     * }
+     */
+    public function getDocuments(Request $request)
+    {
+        if (!Auth::check()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Utilisateur non authentifié'
+            ], 401);
+        }
+        $user = $request->user();
+        $documents = Document::where('user_id', $user->id)->get();
+        return response()->json($documents);
+    }
 }

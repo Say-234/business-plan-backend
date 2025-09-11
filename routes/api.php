@@ -31,6 +31,7 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('a
 // Public routes
 Route::post('/send-notif', [PushNotificationController::class, 'sendPushNotification']);
 Route::post('/testimonial', [ClientController::class, 'testimonial'])->name('api.testimonial.store');
+Route::get('/testimonials', [ClientController::class, 'getTestimonials'])->name('api.testimonials');
 Route::get('/forgetpassword', [ClientController::class, 'forgetpassword'])->name('api.password.forget');
 Route::post('/sendotp', [ClientController::class, 'sendotp'])->name('api.password.otp');
 Route::post('/verifyotp', [ClientController::class, 'checkotp'])->name('api.password.verify.otp');
@@ -92,6 +93,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/client', [ClientController::class, 'index']);
     Route::get('/client/dashboard', [ClientController::class, 'clientdashboard']);
     Route::get('/client/newdashboard', [ClientController::class, 'newdashboard']);
+    Route::get('/documents', [ClientController::class, 'getDocuments'])->name('api.documents');
+    Route::get('/user/profile', [ClientController::class, 'profile'])->name('api.user.profile');
 });
 
 // Profile routes
